@@ -1,0 +1,42 @@
+/* Tailwind-inspired styles for Bulk Product Importer */
+.bpi-wrap { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; padding: 20px; background: #f1f5f9; min-height: 100vh; }
+.bpi-container { max-width: 800px; margin: 0 auto; }
+.bpi-header { margin-bottom: 24px; }
+.bpi-title { font-size: 28px; font-weight: 700; color: #1e293b; margin: 0 0 8px; }
+.bpi-subtitle { color: #64748b; font-size: 14px; margin: 0; }
+.bpi-card { background: #fff; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 20px; overflow: hidden; }
+.bpi-card-header { padding: 16px 24px; border-bottom: 1px solid #e2e8f0; }
+.bpi-card-header h2 { margin: 0; font-size: 16px; font-weight: 600; color: #334155; }
+.bpi-card-body { padding: 24px; }
+.bpi-upload-area { border: 2px dashed #cbd5e1; border-radius: 8px; padding: 48px 24px; text-align: center; cursor: pointer; transition: all 0.2s; background: #f8fafc; }
+.bpi-upload-area:hover, .bpi-upload-area.dragover { border-color: #6366f1; background: #eef2ff; }
+.bpi-upload-icon { font-size: 48px; margin-bottom: 12px; }
+.bpi-upload-text { font-size: 16px; font-weight: 500; color: #334155; margin: 0 0 4px; }
+.bpi-upload-subtext { font-size: 14px; color: #64748b; margin: 0; }
+.bpi-file-input { display: none; }
+.bpi-file-info { margin-top: 16px; padding: 12px 16px; background: #f0fdf4; border-radius: 6px; color: #166534; font-size: 14px; }
+.bpi-options { margin-top: 20px; padding: 16px; background: #f8fafc; border-radius: 6px; }
+.bpi-label { display: flex; align-items: center; gap: 12px; font-size: 14px; font-weight: 500; color: #475569; }
+.bpi-select { padding: 8px 12px; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 14px; background: #fff; }
+.bpi-btn { display: inline-flex; align-items: center; justify-content: center; padding: 12px 24px; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s; border: none; margin-top: 20px; width: 100%; }
+.bpi-btn-primary { background: #6366f1; color: #fff; }
+.bpi-btn-primary:hover:not(:disabled) { background: #4f46e5; }
+.bpi-btn-primary:disabled { background: #c7d2fe; cursor: not-allowed; }
+.bpi-progress-bar { height: 12px; background: #e2e8f0; border-radius: 6px; overflow: hidden; }
+.bpi-progress-fill { height: 100%; background: linear-gradient(90deg, #6366f1, #8b5cf6); border-radius: 6px; transition: width 0.3s; width: 0; }
+.bpi-progress-stats { display: flex; justify-content: space-between; margin-top: 12px; font-size: 14px; color: #64748b; }
+.bpi-current-action { margin-top: 16px; padding: 12px; background: #f8fafc; border-radius: 6px; font-size: 14px; color: #475569; text-align: center; }
+.bpi-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 20px; }
+.bpi-stat { padding: 20px; border-radius: 8px; text-align: center; }
+.bpi-stat span { display: block; font-size: 32px; font-weight: 700; margin-bottom: 4px; }
+.bpi-stat-success { background: #f0fdf4; color: #166534; }
+.bpi-stat-info { background: #eff6ff; color: #1d4ed8; }
+.bpi-stat-warning { background: #fefce8; color: #a16207; }
+.bpi-results-log { padding: 16px; background: #f8fafc; border-radius: 6px; font-size: 14px; max-height: 200px; overflow-y: auto; }
+.bpi-results-log h4 { margin: 0 0 12px; color: #dc2626; }
+.bpi-results-log ul { margin: 0; padding-left: 20px; color: #64748b; }
+.bpi-results-log li { margin-bottom: 4px; }
+.bpi-success { color: #166534; margin: 0; text-align: center; }
+.bpi-error { color: #dc2626; }
+.hidden { display: none !important; }
+
