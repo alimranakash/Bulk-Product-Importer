@@ -4,16 +4,25 @@
     const BPI = {
         importId: null,
         pollInterval: null,
+        uploadType: 'zip',
         stats: { created: 0, updated: 0, skipped: 0, errors: [] },
 
         init: function() {
             this.bindEvents();
             this.checkExistingImport();
+            this.updateUploadUI();
         },
 
         bindEvents: function() {
             const dropZone = $('#bpi-drop-zone');
             const fileInput = document.getElementById('bpi-file-input');
+
+            // Upload type selector
+            $('input[name="upload_type"]').on('change', (e) => {
+                this.uploadType = e.target.value;
+                this.updateUploadUI();
+                this.clearFileSelection();
+            });
 
             dropZone.on('click', function(e) {
                 if (e.target.id !== 'bpi-file-input') {
@@ -26,6 +35,29 @@
             $('#bpi-file-input').on('change', (e) => this.handleFileSelect(e.target.files[0]));
             $('#bpi-upload-form').on('submit', (e) => { e.preventDefault(); this.startImport(); });
             $('#bpi-cancel-btn').on('click', () => this.cancelImport());
+        },
+
+        updateUploadUI: function() {
+            const fileInput = $('#bpi-file-input');
+            const icon = $('#bpi-upload-icon');
+            const text = $('#bpi-upload-text');
+
+            if (this.uploadType === 'zip') {
+                fileInput.attr('accept', '.zip');
+                icon.text('📦');
+                text.text('Drag and drop your ZIP file here');
+            } else {
+                fileInput.attr('accept', '.xlsx,.xls');
+                icon.text('📊');
+                text.text('Drag and drop your Excel file here');
+            }
+        },
+
+        clearFileSelection: function() {
+            this.selectedFile = null;
+            $('#bpi-file-input').val('');
+            $('#bpi-file-info').addClass('hidden').html('');
+            $('#bpi-submit-btn').prop('disabled', true);
         },
 
         checkExistingImport: function() {
@@ -43,12 +75,24 @@
         },
 
         handleFileSelect: function(file) {
-            if (!file || !file.name.endsWith('.zip')) {
+            if (!file) return;
+
+            const isZip = file.name.toLowerCase().endsWith('.zip');
+            const isExcel = file.name.toLowerCase().endsWith('.xlsx') || file.name.toLowerCase().endsWith('.xls');
+
+            if (this.uploadType === 'zip' && !isZip) {
                 this.showMessage('Please select a valid ZIP file', 'error');
                 return;
             }
+
+            if (this.uploadType === 'excel' && !isExcel) {
+                this.showMessage('Please select a valid Excel file (.xlsx or .xls)', 'error');
+                return;
+            }
+
             this.selectedFile = file;
-            $('#bpi-file-info').html(`<strong>Selected:</strong> ${file.name} (${this.formatSize(file.size)})`).removeClass('hidden');
+            const typeLabel = isZip ? 'ZIP' : 'Excel';
+            $('#bpi-file-info').html(`<strong>Selected ${typeLabel}:</strong> ${file.name} (${this.formatSize(file.size)})`).removeClass('hidden');
             $('#bpi-submit-btn').prop('disabled', false);
         },
 
@@ -63,13 +107,18 @@
             if (!this.selectedFile) return;
 
             const formData = new FormData();
-            formData.append('action', 'bpi_upload_zip');
+            formData.append('action', 'bpi_upload_file');
             formData.append('nonce', bpiData.nonce);
-            formData.append('zip_file', this.selectedFile);
+            formData.append('upload_type', this.uploadType);
+            formData.append('import_file', this.selectedFile);
 
             this.stats = { created: 0, updated: 0, skipped: 0, errors: [] };
             this.showProgress();
-            this.updateAction('Uploading and extracting ZIP file...');
+
+            const uploadMsg = this.uploadType === 'zip'
+                ? 'Uploading and extracting ZIP file...'
+                : 'Uploading Excel file...';
+            this.updateAction(uploadMsg);
 
             $.ajax({
                 url: bpiData.ajaxUrl,
@@ -79,8 +128,12 @@
                 contentType: false,
                 success: (response) => {
                     if (response.success) {
-                        this.totalProducts = response.data.total_products;
-                        this.updateAction(`Found ${response.data.total_products} products. Scheduling import...`);
+                        const data = response.data;
+                        if (data.excel_files) {
+                            this.updateAction(`Found ${data.excel_files} Excel file(s). Scheduling file processing...`);
+                        } else {
+                            this.updateAction(`Excel file uploaded. Scheduling import...`);
+                        }
                         setTimeout(() => this.scheduleImport(), 500);
                     } else {
                         this.showError(response.data.message);

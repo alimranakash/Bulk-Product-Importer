@@ -47,3 +47,18 @@
 .bpi-badge { display: inline-block; padding: 4px 10px; background: #dbeafe; color: #1d4ed8; border-radius: 9999px; font-size: 12px; font-weight: 500; }
 .bpi-card-header { display: flex; justify-content: space-between; align-items: center; }
 .bpi-async-note { margin: 16px 0 0; padding: 12px; background: #eff6ff; border-radius: 6px; font-size: 13px; color: #1d4ed8; text-align: center; border: 1px solid #bfdbfe; }
+
+/* Upload Type Selector */
+.bpi-upload-type { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+.bpi-radio-label { display: flex; align-items: flex-start; gap: 12px; padding: 16px; border: 2px solid #e2e8f0; border-radius: 8px; cursor: pointer; transition: all 0.2s; background: #fff; }
+.bpi-radio-label:hover { border-color: #6366f1; background: #fafafa; }
+.bpi-radio-label input[type="radio"] { display: none; }
+.bpi-radio-label input[type="radio"]:checked + .bpi-radio-box { background: #6366f1; border-color: #6366f1; }
+.bpi-radio-label input[type="radio"]:checked + .bpi-radio-box::after { transform: scale(1); }
+.bpi-radio-label input[type="radio"]:checked ~ .bpi-radio-content .bpi-radio-title { color: #6366f1; }
+.bpi-radio-box { width: 20px; height: 20px; border: 2px solid #cbd5e1; border-radius: 50%; position: relative; flex-shrink: 0; margin-top: 2px; transition: all 0.2s; }
+.bpi-radio-box::after { content: ''; position: absolute; top: 50%; left: 50%; width: 8px; height: 8px; background: #fff; border-radius: 50%; transform: translate(-50%, -50%) scale(0); transition: transform 0.2s; }
+.bpi-radio-label input[type="radio"]:checked + .bpi-radio-box::after { transform: translate(-50%, -50%) scale(1); }
+.bpi-radio-content { display: flex; flex-direction: column; gap: 4px; }
+.bpi-radio-title { font-size: 15px; font-weight: 600; color: #334155; }
+.bpi-radio-desc { font-size: 12px; color: #64748b; }

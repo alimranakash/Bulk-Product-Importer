@@ -36,23 +36,43 @@ class BPI_Admin {
             <div class="bpi-container">
                 <div class="bpi-header">
                     <h1 class="bpi-title">Bulk Product Importer</h1>
-                    <p class="bpi-subtitle">Import WooCommerce products from ZIP files containing Excel spreadsheets</p>
+                    <p class="bpi-subtitle">Import WooCommerce products from ZIP or Excel files</p>
                 </div>
 
                 <div class="bpi-card">
                     <div class="bpi-card-header">
-                        <h2>Upload ZIP File</h2>
+                        <h2>Upload File</h2>
                     </div>
                     <div class="bpi-card-body">
                         <form id="bpi-upload-form" enctype="multipart/form-data">
+
+                            <div class="bpi-upload-type">
+                                <label class="bpi-radio-label">
+                                    <input type="radio" name="upload_type" value="zip" id="bpi-type-zip" checked>
+                                    <span class="bpi-radio-box"></span>
+                                    <span class="bpi-radio-content">
+                                        <span class="bpi-radio-title">📦 ZIP File</span>
+                                        <span class="bpi-radio-desc">Excel files + images in a ZIP archive</span>
+                                    </span>
+                                </label>
+                                <label class="bpi-radio-label">
+                                    <input type="radio" name="upload_type" value="excel" id="bpi-type-excel">
+                                    <span class="bpi-radio-box"></span>
+                                    <span class="bpi-radio-content">
+                                        <span class="bpi-radio-title">📊 Excel File</span>
+                                        <span class="bpi-radio-desc">Single Excel file (no images)</span>
+                                    </span>
+                                </label>
+                            </div>
+
                             <div class="bpi-upload-area" id="bpi-drop-zone">
-                                <div class="bpi-upload-icon">📦</div>
-                                <p class="bpi-upload-text">Drag and drop your ZIP file here</p>
+                                <div class="bpi-upload-icon" id="bpi-upload-icon">📦</div>
+                                <p class="bpi-upload-text" id="bpi-upload-text">Drag and drop your ZIP file here</p>
                                 <p class="bpi-upload-subtext">or click to browse</p>
-                                <input type="file" id="bpi-file-input" name="zip_file" accept=".zip" class="bpi-file-input">
+                                <input type="file" id="bpi-file-input" name="import_file" accept=".zip" class="bpi-file-input">
                             </div>
                             <div id="bpi-file-info" class="bpi-file-info hidden"></div>
-                            
+
                             <div class="bpi-options">
                                 <label class="bpi-label">
                                     Batch Size:
@@ -61,10 +81,9 @@ class BPI_Admin {
                                         <option value="25" selected>25 products</option>
                                         <option value="50">50 products</option>
                                         <option value="100">100 products</option>
-                                        <option value="all">All products</option>
                                     </select>
                                 </label>
-                                <p class="bpi-help-text">Uses WooCommerce Action Scheduler for reliable background processing</p>
+                                <p class="bpi-help-text">Uses WooCommerce Action Scheduler for reliable background processing. Each Excel file is processed separately.</p>
                             </div>
 
                             <div class="bpi-btn-group">
