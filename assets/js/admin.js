@@ -2,10 +2,13 @@
     'use strict';
 
     const BPI = {
+        importId: null,
+        pollInterval: null,
         stats: { created: 0, updated: 0, skipped: 0, errors: [] },
-        
+
         init: function() {
             this.bindEvents();
+            this.checkExistingImport();
         },
 
         bindEvents: function() {
@@ -22,6 +25,21 @@
             dropZone.on('drop', (e) => this.handleFileSelect(e.originalEvent.dataTransfer.files[0]));
             $('#bpi-file-input').on('change', (e) => this.handleFileSelect(e.target.files[0]));
             $('#bpi-upload-form').on('submit', (e) => { e.preventDefault(); this.startImport(); });
+            $('#bpi-cancel-btn').on('click', () => this.cancelImport());
+        },
+
+        checkExistingImport: function() {
+            $.post(bpiData.ajaxUrl, {
+                action: 'bpi_get_progress',
+                nonce: bpiData.nonce
+            }, (response) => {
+                if (response.success && response.data.status === 'processing') {
+                    this.importId = response.data.import_id;
+                    this.showProgress();
+                    this.updateAction('Resuming import progress...');
+                    this.startPolling();
+                }
+            });
         },
 
         handleFileSelect: function(file) {
@@ -62,8 +80,8 @@
                 success: (response) => {
                     if (response.success) {
                         this.totalProducts = response.data.total_products;
-                        this.updateAction(`Found ${response.data.total_products} products in ${response.data.excel_files} Excel file(s)`);
-                        setTimeout(() => this.processBatch(), 500);
+                        this.updateAction(`Found ${response.data.total_products} products. Scheduling import...`);
+                        setTimeout(() => this.scheduleImport(), 500);
                     } else {
                         this.showError(response.data.message);
                     }
@@ -72,53 +90,94 @@
             });
         },
 
-        processBatch: function() {
-            this.updateAction('Processing products...');
+        scheduleImport: function() {
+            $.post(bpiData.ajaxUrl, {
+                action: 'bpi_start_import',
+                nonce: bpiData.nonce,
+                batch_size: $('#bpi-batch-size').val()
+            }, (response) => {
+                if (response.success) {
+                    this.importId = response.data.import_id;
+                    this.updateAction('Import scheduled. Processing in background...');
+                    this.startPolling();
+                } else {
+                    this.showError(response.data.message);
+                }
+            });
+        },
 
-            $.ajax({
-                url: bpiData.ajaxUrl,
-                type: 'POST',
-                data: {
-                    action: 'bpi_process_batch',
-                    nonce: bpiData.nonce,
-                    batch_size: $('#bpi-batch-size').val()
-                },
-                success: (response) => {
-                    if (response.success) {
-                        const data = response.data;
-                        this.stats.created += data.created;
-                        this.stats.updated += data.updated;
-                        this.stats.skipped += data.skipped;
-                        this.stats.errors = this.stats.errors.concat(data.errors);
+        startPolling: function() {
+            if (this.pollInterval) clearInterval(this.pollInterval);
+            this.pollProgress();
+            this.pollInterval = setInterval(() => this.pollProgress(), 2000);
+        },
 
-                        this.updateProgress(data.processed, data.total);
+        stopPolling: function() {
+            if (this.pollInterval) {
+                clearInterval(this.pollInterval);
+                this.pollInterval = null;
+            }
+        },
 
-                        if (data.complete) {
-                            this.cleanup();
-                        } else {
-                            setTimeout(() => this.processBatch(), 100);
-                        }
-                    } else {
-                        this.showError(response.data.message);
+        pollProgress: function() {
+            $.post(bpiData.ajaxUrl, {
+                action: 'bpi_get_progress',
+                nonce: bpiData.nonce,
+                import_id: this.importId
+            }, (response) => {
+                if (response.success) {
+                    const data = response.data;
+                    this.stats = {
+                        created: data.created,
+                        updated: data.updated,
+                        skipped: data.skipped,
+                        errors: data.errors
+                    };
+
+                    this.updateProgress(data.processed, data.total);
+
+                    const pending = data.pending_actions > 0 ? ` (${data.pending_actions} batches pending)` : '';
+                    this.updateAction(`Processing: ${data.processed}/${data.total} products${pending}`);
+
+                    if (data.complete || data.status === 'complete' || data.status === 'cancelled') {
+                        this.stopPolling();
+                        this.cleanup();
                     }
-                },
-                error: () => this.showError('Processing failed. Please try again.')
+                } else {
+                    this.stopPolling();
+                    this.showError(response.data.message);
+                }
+            });
+        },
+
+        cancelImport: function() {
+            if (!confirm('Are you sure you want to cancel the import?')) return;
+
+            this.stopPolling();
+            $.post(bpiData.ajaxUrl, {
+                action: 'bpi_cancel_import',
+                nonce: bpiData.nonce,
+                import_id: this.importId
+            }, () => {
+                this.updateAction('Import cancelled');
+                this.showResults();
             });
         },
 
         cleanup: function() {
-            this.updateAction('Cleaning up temporary files...');
+            this.updateAction('Finalizing...');
             $.post(bpiData.ajaxUrl, { action: 'bpi_cleanup', nonce: bpiData.nonce }, () => this.showResults());
         },
 
         showProgress: function() {
             $('#bpi-submit-btn').prop('disabled', true).text('Importing...');
+            $('#bpi-cancel-btn').removeClass('hidden');
             $('#bpi-progress-section').removeClass('hidden');
             $('#bpi-results-section').addClass('hidden');
         },
 
         updateProgress: function(processed, total) {
-            const pct = Math.round((processed / total) * 100);
+            const pct = total > 0 ? Math.round((processed / total) * 100) : 0;
             $('#bpi-progress-fill').css('width', pct + '%');
             $('#bpi-progress-text').text(pct + '%');
             $('#bpi-progress-count').text(`${processed} / ${total} products`);
@@ -130,8 +189,9 @@
 
         showResults: function() {
             $('#bpi-submit-btn').prop('disabled', false).text('Start Import');
+            $('#bpi-cancel-btn').addClass('hidden');
             $('#bpi-results-section').removeClass('hidden');
-            
+
             let html = `<div class="bpi-stats">
                 <div class="bpi-stat bpi-stat-success"><span>${this.stats.created}</span> Created</div>
                 <div class="bpi-stat bpi-stat-info"><span>${this.stats.updated}</span> Updated</div>
@@ -140,17 +200,19 @@
             $('#bpi-results-summary').html(html);
 
             if (this.stats.errors.length > 0) {
-                $('#bpi-results-log').html('<h4>Errors:</h4><ul>' + 
+                $('#bpi-results-log').html('<h4>Errors (last 10):</h4><ul>' +
                     this.stats.errors.map(e => `<li>${e}</li>`).join('') + '</ul>');
             } else {
                 $('#bpi-results-log').html('<p class="bpi-success">Import completed successfully!</p>');
             }
 
             this.updateAction('Import complete!');
+            this.importId = null;
         },
 
         showError: function(message) {
             $('#bpi-submit-btn').prop('disabled', false).text('Start Import');
+            $('#bpi-cancel-btn').addClass('hidden');
             $('#bpi-current-action').html(`<span class="bpi-error">${message}</span>`);
         },
 

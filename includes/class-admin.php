@@ -61,13 +61,20 @@ class BPI_Admin {
                                         <option value="25" selected>25 products</option>
                                         <option value="50">50 products</option>
                                         <option value="100">100 products</option>
+                                        <option value="all">All products</option>
                                     </select>
                                 </label>
+                                <p class="bpi-help-text">Uses WooCommerce Action Scheduler for reliable background processing</p>
                             </div>
 
-                            <button type="submit" id="bpi-submit-btn" class="bpi-btn bpi-btn-primary" disabled>
-                                Start Import
-                            </button>
+                            <div class="bpi-btn-group">
+                                <button type="submit" id="bpi-submit-btn" class="bpi-btn bpi-btn-primary" disabled>
+                                    Start Import
+                                </button>
+                                <button type="button" id="bpi-cancel-btn" class="bpi-btn bpi-btn-danger hidden">
+                                    Cancel Import
+                                </button>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -75,6 +82,7 @@ class BPI_Admin {
                 <div id="bpi-progress-section" class="bpi-card hidden">
                     <div class="bpi-card-header">
                         <h2>Import Progress</h2>
+                        <span class="bpi-badge">Background Processing</span>
                     </div>
                     <div class="bpi-card-body">
                         <div class="bpi-progress-bar">
@@ -85,6 +93,7 @@ class BPI_Admin {
                             <span id="bpi-progress-count">0 / 0 products</span>
                         </div>
                         <div id="bpi-current-action" class="bpi-current-action"></div>
+                        <p class="bpi-async-note">Import runs in the background. You can close this page and check back later.</p>
                     </div>
                 </div>
 

@@ -61,6 +61,7 @@ final class Bulk_Product_Importer {
         require_once BPI_PLUGIN_DIR . 'includes/class-admin.php';
         require_once BPI_PLUGIN_DIR . 'includes/class-excel-reader.php';
         require_once BPI_PLUGIN_DIR . 'includes/class-importer.php';
+        require_once BPI_PLUGIN_DIR . 'includes/class-scheduler.php';
         require_once BPI_PLUGIN_DIR . 'includes/class-ajax-handler.php';
     }
 
@@ -73,6 +74,7 @@ final class Bulk_Product_Importer {
     public function init() {
         if (class_exists('WooCommerce')) {
             new BPI_Admin();
+            new BPI_Scheduler();
             new BPI_Ajax_Handler();
         }
     }

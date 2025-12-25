@@ -76,16 +76,75 @@ class BPI_Importer {
         return $this->results;
     }
 
-    private function import_product($data) {
+    public function import_single_product($data) {
         $type = strtolower($data['type']);
         $sku = sanitize_text_field($data['sku']);
-        
+
         if (empty($sku) && $type !== 'variation') {
             throw new Exception('SKU is required');
         }
 
         $existing_id = $this->get_product_by_sku($sku);
-        
+        $is_update = (bool) $existing_id;
+
+        switch ($type) {
+            case 'variable':
+                $product = $existing_id ? wc_get_product($existing_id) : new WC_Product_Variable();
+                $this->set_product_data($product, $data);
+                $product->save();
+                $this->store_parent_sku($sku, $product->get_id());
+                break;
+
+            case 'variation':
+                $parent_sku = $data['parent'];
+                $parent_id = $this->get_parent_id($parent_sku);
+                if (!$parent_id) {
+                    throw new Exception("Parent product not found: {$parent_sku}");
+                }
+                $product = $existing_id ? wc_get_product($existing_id) : new WC_Product_Variation();
+                $product->set_parent_id($parent_id);
+                $this->set_variation_data($product, $data);
+                $product->save();
+                break;
+
+            default:
+                $product = $existing_id ? wc_get_product($existing_id) : new WC_Product_Simple();
+                $this->set_product_data($product, $data);
+                $product->save();
+        }
+
+        return $is_update ? 'updated' : 'created';
+    }
+
+    private function store_parent_sku($sku, $product_id) {
+        $parent_map = get_option('bpi_parent_map', []);
+        $parent_map[$sku] = $product_id;
+        update_option('bpi_parent_map', $parent_map, false);
+    }
+
+    private function get_parent_id($parent_sku) {
+        if (isset($this->parent_map[$parent_sku])) {
+            return $this->parent_map[$parent_sku];
+        }
+
+        $parent_map = get_option('bpi_parent_map', []);
+        if (isset($parent_map[$parent_sku])) {
+            return $parent_map[$parent_sku];
+        }
+
+        return $this->get_product_by_sku($parent_sku);
+    }
+
+    private function import_product($data) {
+        $type = strtolower($data['type']);
+        $sku = sanitize_text_field($data['sku']);
+
+        if (empty($sku) && $type !== 'variation') {
+            throw new Exception('SKU is required');
+        }
+
+        $existing_id = $this->get_product_by_sku($sku);
+
         switch ($type) {
             case 'variable':
                 $product = $existing_id ? wc_get_product($existing_id) : new WC_Product_Variable();

@@ -4,6 +4,25 @@ defined('ABSPATH') || exit;
 require_once BPI_PLUGIN_DIR . 'vendor/autoload.php';
 
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Reader\IReadFilter;
+
+/**
+ * Memory-efficient chunk reader for large Excel files
+ */
+class BPI_Chunk_Read_Filter implements IReadFilter {
+    private $start_row;
+    private $end_row;
+
+    public function __construct($start_row = 1, $chunk_size = 1000) {
+        $this->start_row = $start_row;
+        $this->end_row = $start_row + $chunk_size - 1;
+    }
+
+    public function readCell($columnAddress, $row, $worksheetName = '') {
+        // Always read row 1 (headers) and the chunk range
+        return $row === 1 || ($row >= $this->start_row && $row <= $this->end_row);
+    }
+}
 
 class BPI_Excel_Reader {
     private $column_map = [
@@ -30,7 +49,85 @@ class BPI_Excel_Reader {
         'Parent' => 'parent'
     ];
 
-    public function read_file($file_path) {
+    /**
+     * Read file in chunks to prevent memory issues with large files
+     */
+    public function read_file($file_path, $chunk_size = 2000) {
+        if (!file_exists($file_path)) {
+            throw new Exception("File not found: {$file_path}");
+        }
+
+        $products = [];
+        $reader = IOFactory::createReaderForFile($file_path);
+
+        // First, get total row count efficiently
+        $reader->setReadDataOnly(true);
+        $info = $reader->listWorksheetInfo($file_path);
+        $total_rows = $info[0]['totalRows'] ?? 0;
+
+        if ($total_rows <= 1) {
+            return [];
+        }
+
+        // Read headers first
+        $filter = new BPI_Chunk_Read_Filter(1, 1);
+        $reader->setReadFilter($filter);
+        $spreadsheet = $reader->load($file_path);
+        $worksheet = $spreadsheet->getActiveSheet();
+        $headers = $worksheet->toArray()[0] ?? [];
+        $header_keys = $this->map_headers($headers);
+        $spreadsheet->disconnectWorksheets();
+        unset($spreadsheet);
+
+        // Process in chunks starting from row 2
+        $start_row = 2;
+        while ($start_row <= $total_rows) {
+            // Clear memory between chunks
+            if (function_exists('gc_collect_cycles')) {
+                gc_collect_cycles();
+            }
+
+            $filter = new BPI_Chunk_Read_Filter($start_row, $chunk_size);
+            $reader = IOFactory::createReaderForFile($file_path);
+            $reader->setReadDataOnly(true);
+            $reader->setReadFilter($filter);
+
+            $spreadsheet = $reader->load($file_path);
+            $worksheet = $spreadsheet->getActiveSheet();
+            $rows = $worksheet->toArray();
+
+            // Skip header row in result (always included by filter)
+            array_shift($rows);
+
+            foreach ($rows as $row) {
+                if ($this->is_empty_row($row)) continue;
+
+                $product = [];
+                foreach ($row as $index => $value) {
+                    if (isset($header_keys[$index])) {
+                        $product[$header_keys[$index]] = trim($value ?? '');
+                    }
+                }
+
+                if (!empty($product['sku']) || !empty($product['name'])) {
+                    $products[] = $this->normalize_product($product);
+                }
+            }
+
+            // Clean up to free memory
+            $spreadsheet->disconnectWorksheets();
+            unset($spreadsheet, $worksheet, $rows);
+
+            $start_row += $chunk_size;
+        }
+
+        return $products;
+    }
+
+    /**
+     * Legacy method for backwards compatibility - reads entire file at once
+     */
+    public function read_file_full($file_path) {
         if (!file_exists($file_path)) {
             throw new Exception("File not found: {$file_path}");
         }
@@ -49,18 +146,21 @@ class BPI_Excel_Reader {
 
         foreach ($rows as $row) {
             if ($this->is_empty_row($row)) continue;
-            
+
             $product = [];
             foreach ($row as $index => $value) {
                 if (isset($header_keys[$index])) {
                     $product[$header_keys[$index]] = trim($value ?? '');
                 }
             }
-            
+
             if (!empty($product['sku']) || !empty($product['name'])) {
                 $products[] = $this->normalize_product($product);
             }
         }
+
+        $spreadsheet->disconnectWorksheets();
+        unset($spreadsheet);
 
         return $products;
     }

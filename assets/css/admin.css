@@ -39,4 +39,11 @@
 .bpi-success { color: #166534; margin: 0; text-align: center; }
 .bpi-error { color: #dc2626; }
 .hidden { display: none !important; }
-
+.bpi-btn-group { display: flex; gap: 12px; margin-top: 20px; }
+.bpi-btn-group .bpi-btn { margin-top: 0; }
+.bpi-btn-danger { background: #dc2626; color: #fff; }
+.bpi-btn-danger:hover { background: #b91c1c; }
+.bpi-help-text { margin: 12px 0 0; font-size: 12px; color: #64748b; }
+.bpi-badge { display: inline-block; padding: 4px 10px; background: #dbeafe; color: #1d4ed8; border-radius: 9999px; font-size: 12px; font-weight: 500; }
+.bpi-card-header { display: flex; justify-content: space-between; align-items: center; }
+.bpi-async-note { margin: 16px 0 0; padding: 12px; background: #eff6ff; border-radius: 6px; font-size: 13px; color: #1d4ed8; text-align: center; border: 1px solid #bfdbfe; }
