@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Featured Image - Post 2</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; }
+        
+        .featured-image {
+            width: 1200px;
+            height: 630px;
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .left-content {
+            flex: 1;
+            padding: 60px;
+            color: #fff;
+            z-index: 1;
+        }
+        
+        .right-content {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1;
+        }
+        
+        .excel-mockup {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+            width: 450px;
+            overflow: hidden;
+            transform: perspective(1000px) rotateY(-5deg) rotateX(2deg);
+        }
+        
+        .excel-header {
+            background: #217346;
+            color: #fff;
+            padding: 12px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .excel-body {
+            padding: 0;
+        }
+        
+        .excel-row {
+            display: grid;
+            grid-template-columns: 80px 120px 100px 80px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .excel-row.header {
+            background: #f5f5f5;
+            font-weight: 600;
+            font-size: 11px;
+            color: #333;
+        }
+        
+        .excel-row div {
+            padding: 10px 12px;
+            font-size: 11px;
+            color: #555;
+            border-right: 1px solid #e0e0e0;
+        }
+        
+        .excel-row div:last-child { border-right: none; }
+        
+        .badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 10px 25px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        
+        h1 {
+            font-size: 48px;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 20px;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+        
+        .subtitle {
+            font-size: 20px;
+            opacity: 0.9;
+            line-height: 1.6;
+            max-width: 400px;
+        }
+        
+        .features {
+            margin-top: 30px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .feature-tag {
+            background: rgba(255,255,255,0.2);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+        
+        .bg-shapes {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .circle-1 { width: 300px; height: 300px; top: -100px; right: -50px; }
+        .circle-2 { width: 200px; height: 200px; bottom: -50px; left: 20%; }
+        
+        .logo {
+            position: absolute;
+            bottom: 30px;
+            left: 40px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 16px;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="featured-image">
+        <div class="bg-shapes">
+            <div class="circle circle-1"></div>
+            <div class="circle circle-2"></div>
+        </div>
+        
+        <div class="left-content">
+            <div class="badge">Step-by-Step • Part 2 of 3</div>
+            <h1>Excel File<br>Format Guide</h1>
+            <p class="subtitle">Master the perfect spreadsheet structure for seamless WooCommerce imports</p>
+            
+            <div class="features">
+                <span class="feature-tag">📋 Column Reference</span>
+                <span class="feature-tag">🏷️ Variable Products</span>
+                <span class="feature-tag">🖼️ Image Setup</span>
+                <span class="feature-tag">📁 ZIP Structure</span>
+            </div>
+        </div>
+        
+        <div class="right-content">
+            <div class="excel-mockup">
+                <div class="excel-header">
+                    <span>📊</span> products.xlsx
+                </div>
+                <div class="excel-body">
+                    <div class="excel-row header">
+                        <div>Type</div>
+                        <div>SKU</div>
+                        <div>Name</div>
+                        <div>Price</div>
+                    </div>
+                    <div class="excel-row">
+                        <div>simple</div>
+                        <div>PROD-001</div>
+                        <div>T-Shirt</div>
+                        <div>$29.99</div>
+                    </div>
+                    <div class="excel-row">
+                        <div>variable</div>
+                        <div>PROD-002</div>
+                        <div>Hoodie</div>
+                        <div>-</div>
+                    </div>
+                    <div class="excel-row">
+                        <div>variation</div>
+                        <div>PROD-002-S</div>
+                        <div>Hoodie - S</div>
+                        <div>$49.99</div>
+                    </div>
+                    <div class="excel-row">
+                        <div>variation</div>
+                        <div>PROD-002-M</div>
+                        <div>Hoodie - M</div>
+                        <div>$49.99</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="logo">
+            <span>📦</span> Bulk Product Importer
+        </div>
+    </div>
+</body>
+</html>
+

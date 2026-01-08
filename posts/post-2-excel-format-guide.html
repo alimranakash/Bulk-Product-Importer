@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Complete guide to creating the perfect Excel file for WooCommerce bulk product import. Learn column formats, variable products, and best practices.">
+    <meta name="keywords" content="WooCommerce, Excel import, product spreadsheet, bulk import format, variable products">
+    <meta name="author" content="Al Imran Akash">
+    <title>The Complete Excel Format Guide for Bulk Product Importer</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif; line-height: 1.8; color: #333; background: #f8fafc; }
+        .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+        article { background: #fff; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); overflow: hidden; }
+        .hero { background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: #fff; padding: 60px 40px; text-align: center; }
+        .hero h1 { font-size: 2.5rem; margin-bottom: 16px; font-weight: 700; }
+        .hero .subtitle { font-size: 1.2rem; opacity: 0.9; }
+        .meta { display: flex; justify-content: center; gap: 20px; margin-top: 20px; font-size: 0.9rem; opacity: 0.8; }
+        .content { padding: 40px; }
+        h2 { font-size: 1.8rem; color: #1e293b; margin: 40px 0 20px; padding-bottom: 10px; border-bottom: 3px solid #10b981; }
+        h3 { font-size: 1.4rem; color: #334155; margin: 30px 0 15px; }
+        h4 { font-size: 1.1rem; color: #475569; margin: 20px 0 10px; }
+        p { margin-bottom: 20px; color: #475569; }
+        ul, ol { margin: 20px 0; padding-left: 30px; }
+        li { margin-bottom: 10px; color: #475569; }
+        .highlight-box { background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%); border-left: 4px solid #10b981; padding: 25px; border-radius: 0 12px 12px 0; margin: 30px 0; }
+        .highlight-box h4 { color: #047857; margin-bottom: 15px; font-size: 1.2rem; }
+        .warning-box { background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-left: 4px solid #f59e0b; padding: 25px; border-radius: 0 12px 12px 0; margin: 30px 0; }
+        .warning-box h4 { color: #b45309; margin-bottom: 15px; font-size: 1.2rem; }
+        .error-box { background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%); border-left: 4px solid #ef4444; padding: 25px; border-radius: 0 12px 12px 0; margin: 30px 0; }
+        .error-box h4 { color: #b91c1c; margin-bottom: 15px; font-size: 1.2rem; }
+        table { width: 100%; border-collapse: collapse; margin: 25px 0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.05); font-size: 0.9rem; }
+        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #e2e8f0; }
+        th { background: #10b981; color: #fff; font-weight: 600; }
+        tr:nth-child(even) { background: #f8fafc; }
+        tr:hover { background: #ecfdf5; }
+        code { background: #1e293b; color: #e2e8f0; padding: 3px 8px; border-radius: 4px; font-family: 'Fira Code', monospace; font-size: 0.85rem; }
+        pre { background: #1e293b; color: #e2e8f0; padding: 25px; border-radius: 12px; overflow-x: auto; margin: 25px 0; font-size: 0.85rem; }
+        pre code { background: none; padding: 0; }
+        .column-table th:first-child { width: 25%; }
+        .column-table th:nth-child(2) { width: 15%; }
+        .column-table th:nth-child(3) { width: 60%; }
+        .example-table { overflow-x: auto; }
+        .example-table table { min-width: 800px; font-size: 0.8rem; }
+        .badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+        .badge-required { background: #fee2e2; color: #b91c1c; }
+        .badge-optional { background: #dbeafe; color: #1e40af; }
+        .toc { background: #f1f5f9; padding: 25px 30px; border-radius: 12px; margin: 30px 0; }
+        .toc h4 { color: #1e293b; margin-bottom: 15px; }
+        .toc ul { list-style: none; padding: 0; }
+        .toc li { margin-bottom: 8px; }
+        .toc a { color: #10b981; text-decoration: none; }
+        .toc a:hover { text-decoration: underline; }
+        footer { text-align: center; padding: 30px; color: #64748b; font-size: 0.9rem; border-top: 1px solid #e2e8f0; }
+        .nav-links { display: flex; justify-content: space-between; margin: 40px 0; padding: 20px; background: #f8fafc; border-radius: 12px; }
+        .nav-links a { color: #10b981; text-decoration: none; font-weight: 600; }
+        .nav-links a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <article>
+            <header class="hero">
+                <h1>The Complete Excel Format Guide</h1>
+                <p class="subtitle">Master the Art of Preparing Your Product Data for Import</p>
+                <div class="meta">
+                    <span>📅 January 6, 2026</span>
+                    <span>⏱️ 12 min read</span>
+                    <span>👤 Al Imran Akash</span>
+                </div>
+            </header>
+
+            <div class="content">
+                <div class="toc">
+                    <h4>📑 Table of Contents</h4>
+                    <ul>
+                        <li><a href="#overview">1. Excel File Overview</a></li>
+                        <li><a href="#columns">2. Complete Column Reference</a></li>
+                        <li><a href="#simple">3. Simple Products</a></li>
+                        <li><a href="#variable">4. Variable Products & Variations</a></li>
+                        <li><a href="#images">5. Image Configuration</a></li>
+                        <li><a href="#categories">6. Categories & Attributes</a></li>
+                        <li><a href="#zip">7. ZIP File Structure</a></li>
+                        <li><a href="#mistakes">8. Common Mistakes to Avoid</a></li>
+                        <li><a href="#tips">9. Pro Tips & Best Practices</a></li>
+                    </ul>
+                </div>
+
+                <section id="overview">
+                    <h2>Excel File Overview</h2>
+                    <p>The heart of Bulk Product Importer is your Excel spreadsheet. This file contains all the information about your products – names, prices, descriptions, images, categories, and more. Getting the format right is crucial for a successful import.</p>
+
+                    <h3>Supported File Formats</h3>
+                    <ul>
+                        <li><strong>.xlsx</strong> – Modern Excel format (recommended)</li>
+                        <li><strong>.xls</strong> – Legacy Excel format</li>
+                    </ul>
+
+                    <h3>Basic Structure</h3>
+                    <p>Your Excel file should follow this basic structure:</p>
+                    <ul>
+                        <li><strong>Row 1:</strong> Column headers (must match exactly)</li>
+                        <li><strong>Row 2+:</strong> Product data (one product per row)</li>
+                    </ul>
+
+                    <div class="highlight-box">
+                        <h4>💡 Pro Tip</h4>
+                        <p>The easiest way to get the correct format is to export a few products from WooCommerce first. Go to <strong>Products → All Products → Export</strong> and use that file as a template.</p>
+                    </div>
+                </section>
+
+                <section id="columns">
+                    <h2>Complete Column Reference</h2>
+                    <p>Below is a complete reference of all supported columns. Column headers must match exactly (case-sensitive).</p>
+
+                    <h3>Essential Columns</h3>
+                    <div class="column-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Column Header</th>
+                                    <th>Required</th>
+                                    <th>Description & Example</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>Type</code></td>
+                                    <td><span class="badge badge-required">Required</span></td>
+                                    <td>Product type: <code>simple</code>, <code>variable</code>, or <code>variation</code></td>
+                                </tr>
+                                <tr>
+                                    <td><code>SKU</code></td>
+                                    <td><span class="badge badge-required">Required*</span></td>
+                                    <td>Unique product identifier. Example: <code>TSHIRT-BLU-001</code></td>
+                                </tr>
+                                <tr>
+                                    <td><code>Name</code></td>
+
+                    <h3>Optional Columns</h3>
+                    <div class="column-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Column Header</th>
+                                    <th>Required</th>
+                                    <th>Description & Example</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>Published</code></td>
+                                    <td><span class="badge badge-optional">Optional</span></td>
+                                    <td>1 = Published, 0 = Draft. Default: <code>1</code></td>
+                                </tr>
+                                <tr>
+                                    <td><code>Is featured?</code></td>
+                                    <td><span class="badge badge-optional">Optional</span></td>
+                                    <td>1 = Featured, 0 = Not featured. Default: <code>0</code></td>
+                                </tr>
+                                <tr>
+                                    <td><code>Visibility in catalog</code></td>
+                                    <td><span class="badge badge-optional">Optional</span></td>
+                                    <td><code>visible</code>, <code>catalog</code>, <code>search</code>, <code>hidden</code></td>
+                                </tr>
+                                <tr>
+                                    <td><code>Short description</code></td>
+                                    <td><span class="badge badge-optional">Optional</span></td>
+                                    <td>Brief product summary shown on listing pages</td>
+                                </tr>
+                                <tr>
+                                    <td><code>Description</code></td>
+                                    <td><span class="badge badge-optional">Optional</span></td>
+                                    <td>Full product description (supports HTML)</td>
+                                </tr>
+                                <tr>
+                                    <td><code>Sale price</code></td>
+                                    <td><span class="badge badge-optional">Optional</span></td>
+                                    <td>Discounted price. Example: <code>24.99</code></td>
+                                </tr>
+                                <tr>
+                                    <td><code>Categories</code></td>
+                                    <td><span class="badge badge-optional">Optional</span></td>
+                                    <td>Category path with <code>&gt;</code> for hierarchy. Example: <code>Clothing &gt; Men &gt; T-Shirts</code></td>
+                                </tr>
+                                <tr>
+                                    <td><code>Images</code></td>
+                                    <td><span class="badge badge-optional">Optional</span></td>
+                                    <td>Image filename or URL. Multiple images separated by comma</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>Attribute Columns</h3>
+                    <p>The plugin supports up to 3 attributes per product. Each attribute requires 4 columns:</p>
+                    <div class="column-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Column Header</th>
+                                    <th>Required</th>
+                                    <th>Description & Example</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>Attribute 1 name</code></td>
+                                    <td><span class="badge badge-optional">Optional</span></td>
+                                    <td>Attribute name. Example: <code>Size</code> or <code>Color</code></td>
+                                </tr>
+                                <tr>
+                                    <td><code>Attribute 1 value(s)</code></td>
+                                    <td><span class="badge badge-optional">Optional</span></td>
+                                    <td>Values separated by comma. Example: <code>S, M, L, XL</code></td>
+                                </tr>
+                                <tr>
+                                    <td><code>Attribute 1 visible</code></td>
+                                    <td><span class="badge badge-optional">Optional</span></td>
+                                    <td>Show on product page: <code>1</code> or <code>0</code>. Default: <code>1</code></td>
+                                </tr>
+                                <tr>
+                                    <td><code>Attribute 1 global</code></td>
+                                    <td><span class="badge badge-optional">Optional</span></td>
+                                    <td>Use global attribute: <code>1</code> or <code>0</code>. Default: <code>1</code></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p>Replace <code>1</code> with <code>2</code> or <code>3</code> for additional attributes.</p>
+                </section>
+
+                <section id="simple">
+                    <h2>Simple Products</h2>
+                    <p>Simple products are the most straightforward to import. Each row represents one complete product.</p>
+
+                    <h3>Example: Simple Products</h3>
+                    <div class="example-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Type</th>
+                                    <th>SKU</th>
+                                    <th>Name</th>
+                                    <th>Regular price</th>
+                                    <th>Sale price</th>
+                                    <th>Categories</th>
+                                    <th>Images</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>simple</td>
+                                    <td>BOOK-001</td>
+                                    <td>WordPress Development Guide</td>
+                                    <td>49.99</td>
+                                    <td>39.99</td>
+                                    <td>Books &gt; Programming</td>
+                                    <td>book-wp-guide.jpg</td>
+                                </tr>
+                                <tr>
+                                    <td>simple</td>
+                                    <td>MUG-001</td>
+                                    <td>Developer Coffee Mug</td>
+                                    <td>14.99</td>
+                                    <td></td>
+                                    <td>Accessories &gt; Mugs</td>
+                                    <td>mug-dev.jpg, mug-dev-2.jpg</td>
+                                </tr>
+                                <tr>
+                                    <td>simple</td>
+                                    <td>STICKER-001</td>
+                                    <td>Laptop Sticker Pack</td>
+                                    <td>9.99</td>
+                                    <td>7.99</td>
+                                    <td>Accessories &gt; Stickers</td>
+                                    <td>stickers-pack.jpg</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="highlight-box">
+                        <h4>✅ Key Points for Simple Products</h4>
+                        <ul>
+                            <li>Type must be <code>simple</code></li>
+                            <li>SKU must be unique across all products</li>
+                            <li>Leave Sale price empty if there's no discount</li>
+                            <li>Multiple images are separated by commas</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section id="variable">
+                    <h2>Variable Products & Variations</h2>
+                    <p>Variable products are more complex but incredibly powerful. They allow you to sell products with different options like sizes, colors, or materials.</p>
+
+                    <h3>Understanding the Structure</h3>
+                    <p>A variable product consists of:</p>
+                    <ol>
+                        <li><strong>Parent Product</strong> (Type = <code>variable</code>) – Defines the product and its attributes</li>
+                        <li><strong>Variations</strong> (Type = <code>variation</code>) – Individual purchasable items with specific attribute values</li>
+                    </ol>
+
+                    <h3>Example: T-Shirt with Size and Color</h3>
+                    <p>Let's create a T-Shirt available in 3 sizes (S, M, L) and 2 colors (Blue, Red):</p>
+
+                    <h4>Step 1: Parent Product Row</h4>
+                    <div class="example-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Type</th>
+                                    <th>SKU</th>
+                                    <th>Name</th>
+                                    <th>Attr 1 name</th>
+                                    <th>Attr 1 value(s)</th>
+                                    <th>Attr 2 name</th>
+                                    <th>Attr 2 value(s)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>variable</td>
+                                    <td>TSHIRT-001</td>
+                                    <td>Premium Cotton T-Shirt</td>
+                                    <td>Size</td>
+                                    <td>S, M, L</td>
+                                    <td>Color</td>
+                                    <td>Blue, Red</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h4>Step 2: Variation Rows</h4>
+                    <div class="example-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Type</th>
+                                    <th>SKU</th>
+                                    <th>Parent</th>
+                                    <th>Regular price</th>
+                                    <th>Attr 1 name</th>
+                                    <th>Attr 1 value(s)</th>
+                                    <th>Attr 2 name</th>
+                                    <th>Attr 2 value(s)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>variation</td>
+                                    <td>TSHIRT-001-S-BLU</td>
+                                    <td>TSHIRT-001</td>
+                                    <td>24.99</td>
+                                    <td>Size</td>
+                                    <td>S</td>
+                                    <td>Color</td>
+                                    <td>Blue</td>
+                                </tr>
+                                <tr>
+                                    <td>variation</td>
+                                    <td>TSHIRT-001-M-BLU</td>
+                                    <td>TSHIRT-001</td>
+                                    <td>24.99</td>
+                                    <td>Size</td>
+                                    <td>M</td>
+                                    <td>Color</td>
+                                    <td>Blue</td>
+                                </tr>
+                                <tr>
+                                    <td>variation</td>
+                                    <td>TSHIRT-001-L-BLU</td>
+                                    <td>TSHIRT-001</td>
+                                    <td>26.99</td>
+                                    <td>Size</td>
+                                    <td>L</td>
+                                    <td>Color</td>
+                                    <td>Blue</td>
+                                </tr>
+                                <tr>
+                                    <td>variation</td>
+                                    <td>TSHIRT-001-S-RED</td>
+                                    <td>TSHIRT-001</td>
+                                    <td>24.99</td>
+                                    <td>Size</td>
+                                    <td>S</td>
+                                    <td>Color</td>
+                                    <td>Red</td>
+                                </tr>
+                                <tr>
+                                    <td>variation</td>
+                                    <td>TSHIRT-001-M-RED</td>
+                                    <td>TSHIRT-001</td>
+                                    <td>24.99</td>
+                                    <td>Size</td>
+                                    <td>M</td>
+                                    <td>Color</td>
+                                    <td>Red</td>
+                                </tr>
+                                <tr>
+                                    <td>variation</td>
+                                    <td>TSHIRT-001-L-RED</td>
+                                    <td>TSHIRT-001</td>
+                                    <td>26.99</td>
+                                    <td>Size</td>
+                                    <td>L</td>
+                                    <td>Color</td>
+                                    <td>Red</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="warning-box">
+                        <h4>⚠️ Important Notes</h4>
+                        <ul>
+                            <li>The <code>Parent</code> column must contain the exact SKU of the variable product</li>
+                            <li>Each variation should have only ONE value per attribute (not comma-separated)</li>
+                            <li>Variable products are processed before variations (the plugin sorts automatically)</li>
+                            <li>Variation prices can differ from each other</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section id="images">
+                    <h2>Image Configuration</h2>
+                    <p>There are two ways to add images to your products:</p>
+
+                    <h3>Option 1: Images in ZIP File (Recommended)</h3>
+                    <p>Place your images in an <code>images</code> folder inside your ZIP. Then reference them by filename in Excel:</p>
+                    <pre><code>Images column: product-001.jpg, product-001-side.jpg, product-001-back.jpg</code></pre>
+
+                    <p>The first image becomes the featured image; additional images go to the gallery.</p>
+
+                    <h3>Option 2: External URLs</h3>
+                    <p>You can also use full URLs to images hosted elsewhere:</p>
+                    <pre><code>Images column: https://example.com/images/product-001.jpg</code></pre>
+
+                    <div class="highlight-box">
+                        <h4>📁 Supported Image Formats</h4>
+                        <ul>
+                            <li><strong>JPG/JPEG</strong> – Best for photos</li>
+                            <li><strong>PNG</strong> – Best for graphics with transparency</li>
+                            <li><strong>WebP</strong> – Modern format with excellent compression</li>
+                            <li><strong>GIF</strong> – For simple animations</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section id="categories">
+                    <h2>Categories & Attributes</h2>
+
+                    <h3>Category Format</h3>
+                    <p>Use <code>&gt;</code> to create hierarchical categories:</p>
+                    <pre><code>Clothing > Men > T-Shirts</code></pre>
+                    <p>This creates a nested structure: Clothing → Men → T-Shirts. Categories are auto-created if they don't exist.</p>
+
+                    <h3>Multiple Categories</h3>
+                    <p>Assign a product to multiple categories using a pipe <code>|</code>:</p>
+                    <pre><code>Clothing > Men | Featured | Sale Items</code></pre>
+                </section>
+
+                <section id="zip">
+                    <h2>ZIP File Structure</h2>
+                    <p>Here's the recommended structure for your import package:</p>
+                    <pre><code>my-import.zip
+├── products.xlsx           ← Main product data
+├── clothing.xlsx           ← Additional file (optional)
+├── electronics.xlsx        ← Another category (optional)
+└── images/
+    ├── tshirt-blue.jpg
+    ├── tshirt-red.jpg
+    ├── laptop-case.jpg
+    └── phone-holder.png</code></pre>
+
+                    <div class="warning-box">
+                        <h4>⚠️ Image Folder Names</h4>
+                        <p>The plugin looks for images in folders named: <code>images</code>, <code>Images</code>, <code>IMAGES</code>, or <code>img</code>. Make sure your folder matches one of these names.</p>
+                    </div>
+                </section>
+
+                <section id="mistakes">
+                    <h2>Common Mistakes to Avoid</h2>
+
+                    <div class="error-box">
+                        <h4>❌ Common Errors</h4>
+                        <ul>
+                            <li><strong>Empty SKU:</strong> All products (except variations) must have a unique SKU</li>
+                            <li><strong>Wrong Parent SKU:</strong> Variations must reference the exact parent SKU</li>
+                            <li><strong>Spaces in Image Names:</strong> Use hyphens or underscores instead of spaces</li>
+                            <li><strong>Wrong Column Headers:</strong> Headers must match exactly (case-sensitive)</li>
+                            <li><strong>Missing Attributes:</strong> Variable products must define all attributes used by variations</li>
+                            <li><strong>Variation Before Parent:</strong> Variable products must be listed before their variations</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section id="tips">
+                    <h2>Pro Tips & Best Practices</h2>
+                    <ul>
+                        <li><strong>Export First:</strong> Export existing products from WooCommerce to see the correct format</li>
+                        <li><strong>Test Small:</strong> Import 10-20 products first to verify format</li>
+                        <li><strong>Use Consistent SKUs:</strong> Create a SKU naming convention (e.g., CATEGORY-ITEM-VARIANT)</li>
+                        <li><strong>Optimize Images:</strong> Resize images to 1000x1000px max before including in ZIP</li>
+                        <li><strong>Split Large Files:</strong> For 10,000+ products, split into multiple Excel files</li>
+                        <li><strong>Check Encoding:</strong> Save Excel files with UTF-8 encoding for special characters</li>
+                    </ul>
+                </section>
+
+                <div class="nav-links">
+                    <a href="post-1-introduction.html">← Previous: Introduction</a>
+                    <a href="post-3-advanced-features.html">Next: Advanced Features →</a>
+                </div>
+            </div>
+
+            <footer>
+                <p>© 2026 Bulk Product Importer by Al Imran Akash. All rights reserved.</p>
+                <p>Part 2 of 3 in the Bulk Product Importer Guide Series</p>
+            </footer>
+        </article>
+    </div>
+</body>
+</html>

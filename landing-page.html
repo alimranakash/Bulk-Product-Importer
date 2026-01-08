@@ -1,0 +1,1782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Import thousands of WooCommerce products in minutes with Excel files and images. Save 50+ hours on product uploads. Background processing, no timeouts.">
+    <meta name="keywords" content="WooCommerce bulk import, product importer, Excel import WooCommerce, bulk product upload, WooCommerce CSV import alternative">
+    <meta name="author" content="Al Imran Akash">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Bulk Product Importer - Import 1000s of WooCommerce Products in Minutes">
+    <meta property="og:description" content="Stop wasting hours on manual product entry. Import your entire catalog with images using simple Excel files.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="og-image.jpg">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Bulk Product Importer for WooCommerce">
+    <meta name="twitter:description" content="Import thousands of products with images in minutes, not hours.">
+    
+    <title>Bulk Product Importer - Import 1000s of WooCommerce Products in Minutes</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #818cf8;
+            --secondary: #8b5cf6;
+            --accent: #10b981;
+            --accent-light: #34d399;
+            --dark: #0f172a;
+            --gray-900: #1e293b;
+            --gray-700: #334155;
+            --gray-500: #64748b;
+            --gray-300: #cbd5e1;
+            --gray-100: #f1f5f9;
+            --white: #ffffff;
+            --gradient: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            --gradient-dark: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        html { scroll-behavior: smooth; }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: var(--gray-700);
+            background: var(--white);
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+        
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 100px;
+            left: 0;
+            right: 0;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            border-bottom: 1px solid var(--gray-100);
+            transition: all 0.3s;
+        }
+        
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 24px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--dark);
+            text-decoration: none;
+        }
+        
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+        
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+        
+        .nav-links a {
+            color: var(--gray-700);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover { color: var(--primary); }
+        
+        .nav-cta {
+            background: var(--gradient);
+            color: var(--white) !important;
+            padding: 10px 24px;
+            border-radius: 8px;
+            font-weight: 600 !important;
+        }
+        
+        .nav-cta:hover { opacity: 0.9; transform: translateY(-1px); }
+        
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .btn-primary {
+            background: var(--gradient);
+            color: var(--white);
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(99, 102, 241, 0.5);
+        }
+        
+        .btn-secondary {
+            background: var(--white);
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: var(--white);
+        }
+        
+        .btn-large {
+            padding: 20px 48px;
+            font-size: 1.125rem;
+        }
+        
+        .btn-accent {
+            background: var(--accent);
+            color: var(--white);
+            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.4);
+        }
+        
+        .btn-accent:hover {
+            background: var(--accent-light);
+            transform: translateY(-3px);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 140px 0 100px;
+            background: linear-gradient(180deg, #f8faff 0%, #fff 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-bg-shapes {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .hero-shape {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.5;
+        }
+
+        .hero-shape-1 {
+            width: 600px;
+            height: 600px;
+            background: rgba(99, 102, 241, 0.2);
+            top: -200px;
+            right: -100px;
+        }
+
+        .hero-shape-2 {
+            width: 400px;
+            height: 400px;
+            background: rgba(139, 92, 246, 0.15);
+            bottom: -100px;
+            left: -100px;
+        }
+
+        .hero-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.1;
+            color: var(--dark);
+            margin-bottom: 24px;
+        }
+
+        .hero-content h1 span {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-content p {
+            font-size: 1.25rem;
+            color: var(--gray-500);
+            margin-bottom: 32px;
+            line-height: 1.8;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 40px;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 40px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--gray-500);
+        }
+
+        .hero-image {
+            position: relative;
+        }
+
+        .hero-mockup {
+            background: var(--white);
+            border-radius: 20px;
+            box-shadow: 0 40px 80px rgba(0,0,0,0.15);
+            overflow: hidden;
+            border: 1px solid var(--gray-100);
+        }
+
+        .mockup-header {
+            background: var(--gradient);
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .mockup-dots {
+            display: flex;
+            gap: 8px;
+        }
+
+        .mockup-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+        }
+
+        .mockup-title {
+            color: var(--white);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .mockup-body {
+            padding: 30px;
+        }
+
+        .upload-zone {
+            border: 2px dashed var(--gray-300);
+            border-radius: 16px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 24px;
+            background: var(--gray-100);
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            margin-bottom: 16px;
+        }
+
+        .upload-text {
+            color: var(--gray-500);
+            font-size: 0.95rem;
+        }
+
+        .upload-text strong {
+            color: var(--primary);
+        }
+
+        .progress-demo {
+            background: var(--gray-100);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 0.9rem;
+        }
+
+        .progress-bar-bg {
+            background: var(--gray-300);
+            border-radius: 10px;
+            height: 12px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            background: var(--gradient);
+            height: 100%;
+            width: 73%;
+            border-radius: 10px;
+            animation: progress 2s ease-in-out infinite;
+        }
+
+        @keyframes progress {
+            0%, 100% { width: 73%; }
+            50% { width: 78%; }
+        }
+
+        .floating-badge {
+            position: absolute;
+            background: var(--white);
+            padding: 16px 20px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .badge-1 {
+            top: 20px;
+            right: -20px;
+        }
+
+        .badge-2 {
+            bottom: 60px;
+            left: -30px;
+            animation-delay: 1s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .badge-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .badge-icon.green { background: #dcfce7; }
+        .badge-icon.blue { background: #dbeafe; }
+
+        .badge-text strong {
+            display: block;
+            font-size: 0.95rem;
+            color: var(--dark);
+        }
+
+        .badge-text span {
+            font-size: 0.8rem;
+            color: var(--gray-500);
+        }
+
+        /* Trust Bar */
+        .trust-bar {
+            padding: 40px 0;
+            background: var(--white);
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        .trust-content {
+            text-align: center;
+        }
+
+        .trust-label {
+            font-size: 0.875rem;
+            color: var(--gray-500);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .trust-logos {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 60px;
+            flex-wrap: wrap;
+            opacity: 0.6;
+        }
+
+        .trust-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--gray-500);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Problem Section */
+        .problem {
+            padding: 100px 0;
+            background: var(--dark);
+            color: var(--white);
+        }
+
+        .section-label {
+            display: inline-block;
+            background: rgba(99, 102, 241, 0.2);
+            color: var(--primary-light);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 24px;
+        }
+
+        .problem h2 {
+            font-size: 2.75rem;
+            font-weight: 800;
+            margin-bottom: 24px;
+            line-height: 1.2;
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 60px;
+        }
+
+        .problem-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 40px 30px;
+            transition: all 0.3s;
+        }
+
+        .problem-card:hover {
+            background: rgba(255,255,255,0.1);
+            transform: translateY(-5px);
+        }
+
+        .problem-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .problem-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .problem-card p {
+            color: var(--gray-300);
+            font-size: 0.95rem;
+        }
+
+        /* Solution Section */
+        .solution {
+            padding: 100px 0;
+            background: linear-gradient(180deg, var(--gray-100) 0%, var(--white) 100%);
+        }
+
+        .solution-header {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 60px;
+        }
+
+        .solution h2 {
+            font-size: 2.75rem;
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 20px;
+        }
+
+        .solution h2 span {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .solution-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+        }
+
+        .solution-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+            border: 1px solid var(--gray-100);
+            display: flex;
+            gap: 24px;
+            transition: all 0.3s;
+        }
+
+        .solution-card:hover {
+            box-shadow: 0 20px 60px rgba(99, 102, 241, 0.15);
+            transform: translateY(-5px);
+        }
+
+        .solution-icon {
+            width: 64px;
+            height: 64px;
+            background: var(--gradient);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            flex-shrink: 0;
+        }
+
+        .solution-text h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 10px;
+        }
+
+        .solution-text p {
+            color: var(--gray-500);
+            font-size: 0.95rem;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 100px 0;
+            background: var(--white);
+        }
+
+        .features-header {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 60px;
+        }
+
+        .features h2 {
+            font-size: 2.75rem;
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 20px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .feature-card {
+            background: var(--gray-100);
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: center;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .feature-card:hover {
+            background: var(--white);
+            border-color: var(--primary);
+            box-shadow: 0 20px 60px rgba(99, 102, 241, 0.15);
+            transform: translateY(-8px);
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--gradient);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto 24px;
+        }
+
+        .feature-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 12px;
+        }
+
+        .feature-card p {
+            color: var(--gray-500);
+            font-size: 0.95rem;
+        }
+
+        /* How It Works */
+        .how-it-works {
+            padding: 100px 0;
+            background: linear-gradient(180deg, var(--gray-100) 0%, var(--white) 100%);
+        }
+
+        .how-header {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 80px;
+        }
+
+        .how-header h2 {
+            font-size: 2.75rem;
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 20px;
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+            position: relative;
+        }
+
+        .steps::before {
+            content: '';
+            position: absolute;
+            top: 60px;
+            left: 15%;
+            right: 15%;
+            height: 4px;
+            background: var(--gradient);
+            border-radius: 4px;
+            z-index: 0;
+        }
+
+        .step {
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .step-number {
+            width: 80px;
+            height: 80px;
+            background: var(--white);
+            border: 4px solid var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin: 0 auto 24px;
+            position: relative;
+        }
+
+        .step-icon {
+            font-size: 2rem;
+        }
+
+        .step h3 {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 10px;
+        }
+
+        .step p {
+            color: var(--gray-500);
+            font-size: 0.9rem;
+        }
+
+        /* Testimonials */
+        .testimonials {
+            padding: 100px 0;
+            background: var(--dark);
+        }
+
+        .testimonials-header {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 60px;
+            color: var(--white);
+        }
+
+        .testimonials-header h2 {
+            font-size: 2.75rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .testimonial-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 40px;
+            transition: all 0.3s;
+        }
+
+        .testimonial-card:hover {
+            background: rgba(255,255,255,0.1);
+            transform: translateY(-5px);
+        }
+
+        .stars {
+            color: #fbbf24;
+            font-size: 1.25rem;
+            margin-bottom: 20px;
+        }
+
+        .testimonial-text {
+            color: var(--gray-300);
+            font-size: 1rem;
+            line-height: 1.8;
+            margin-bottom: 24px;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            color: var(--white);
+        }
+
+        .author-info strong {
+            display: block;
+            color: var(--white);
+            font-size: 1rem;
+        }
+
+        .author-info span {
+            color: var(--gray-500);
+            font-size: 0.875rem;
+        }
+
+        /* Pricing Section */
+        .pricing {
+            padding: 100px 0;
+            background: linear-gradient(180deg, var(--white) 0%, var(--gray-100) 100%);
+        }
+
+        .pricing-header {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 60px;
+        }
+
+        .pricing-header h2 {
+            font-size: 2.75rem;
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 20px;
+        }
+
+        .pricing-toggle {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 40px;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            background: var(--white);
+            border-radius: 24px;
+            padding: 48px 40px;
+            text-align: center;
+            border: 2px solid var(--gray-100);
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .pricing-card:hover {
+            border-color: var(--primary-light);
+            box-shadow: 0 20px 60px rgba(99, 102, 241, 0.15);
+        }
+
+        .pricing-card.featured {
+            border: 3px solid var(--primary);
+            transform: scale(1.05);
+            box-shadow: 0 30px 80px rgba(99, 102, 241, 0.25);
+        }
+
+        .popular-badge {
+            position: absolute;
+            top: -16px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--gradient);
+            color: var(--white);
+            padding: 8px 24px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .pricing-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 8px;
+        }
+
+        .pricing-desc {
+            color: var(--gray-500);
+            font-size: 0.9rem;
+            margin-bottom: 24px;
+        }
+
+        .pricing-price {
+            margin-bottom: 32px;
+        }
+
+        .price-amount {
+            font-size: 4rem;
+            font-weight: 800;
+            color: var(--dark);
+            line-height: 1;
+        }
+
+        .price-currency {
+            font-size: 1.5rem;
+            vertical-align: super;
+        }
+
+        .price-period {
+            font-size: 1rem;
+            color: var(--gray-500);
+        }
+
+        .pricing-features {
+            text-align: left;
+            margin-bottom: 32px;
+        }
+
+        .pricing-features li {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--gray-100);
+            font-size: 0.95rem;
+            color: var(--gray-700);
+        }
+
+        .pricing-features li:last-child {
+            border-bottom: none;
+        }
+
+        .check-icon {
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        .pricing-cta {
+            width: 100%;
+        }
+
+        /* Guarantee Section */
+        .guarantee {
+            padding: 80px 0;
+            background: var(--gradient);
+        }
+
+        .guarantee-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 40px;
+            text-align: center;
+            color: var(--white);
+        }
+
+        .guarantee-badge {
+            width: 120px;
+            height: 120px;
+            background: var(--white);
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .guarantee-badge span {
+            font-size: 2.5rem;
+        }
+
+        .guarantee-badge strong {
+            color: var(--primary);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+        }
+
+        .guarantee-text h3 {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+
+        .guarantee-text p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+            max-width: 500px;
+        }
+
+        /* FAQ Section */
+        .faq {
+            padding: 100px 0;
+            background: var(--white);
+        }
+
+        .faq-header {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 60px;
+        }
+
+        .faq-header h2 {
+            font-size: 2.75rem;
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 20px;
+        }
+
+        .faq-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            background: var(--gray-100);
+            border-radius: 16px;
+            padding: 28px 32px;
+            transition: all 0.3s;
+        }
+
+        .faq-item:hover {
+            background: var(--white);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+        }
+
+        .faq-question {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .faq-q {
+            background: var(--gradient);
+            color: var(--white);
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            flex-shrink: 0;
+        }
+
+        .faq-answer {
+            color: var(--gray-500);
+            font-size: 0.95rem;
+            padding-left: 40px;
+            line-height: 1.7;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 120px 0;
+            background: var(--dark);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-bg {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+        }
+
+        .cta-shape {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+        }
+
+        .cta-shape-1 {
+            width: 500px;
+            height: 500px;
+            background: rgba(99, 102, 241, 0.3);
+            top: -200px;
+            left: -100px;
+        }
+
+        .cta-shape-2 {
+            width: 400px;
+            height: 400px;
+            background: rgba(139, 92, 246, 0.3);
+            bottom: -150px;
+            right: -100px;
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+            color: var(--white);
+        }
+
+        .cta-content h2 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+        }
+
+        .cta-content p {
+            font-size: 1.25rem;
+            opacity: 0.8;
+            max-width: 600px;
+            margin: 0 auto 40px;
+        }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        /* Footer */
+        footer {
+            padding: 60px 0 40px;
+            background: var(--gray-900);
+            color: var(--white);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 60px;
+            margin-bottom: 60px;
+        }
+
+        .footer-brand p {
+            color: var(--gray-500);
+            margin-top: 16px;
+            font-size: 0.95rem;
+        }
+
+        .footer-links h4 {
+            font-size: 1rem;
+            margin-bottom: 20px;
+            color: var(--white);
+        }
+
+        .footer-links ul {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: var(--gray-500);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--white);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 30px;
+            text-align: center;
+            color: var(--gray-500);
+            font-size: 0.875rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .hero-container { grid-template-columns: 1fr; text-align: center; }
+            .hero-content h1 { font-size: 2.75rem; }
+            .hero-buttons { justify-content: center; }
+            .hero-stats { justify-content: center; }
+            .hero-image { display: none; }
+            .problem-grid { grid-template-columns: 1fr; }
+            .solution-grid { grid-template-columns: 1fr; }
+            .features-grid { grid-template-columns: repeat(2, 1fr); }
+            .steps { grid-template-columns: repeat(2, 1fr); gap: 40px; }
+            .steps::before { display: none; }
+            .testimonials-grid { grid-template-columns: 1fr; }
+            .pricing-grid { grid-template-columns: 1fr; max-width: 400px; }
+            .pricing-card.featured { transform: none; }
+            .faq-grid { grid-template-columns: 1fr; }
+            .footer-grid { grid-template-columns: repeat(2, 1fr); gap: 40px; }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .hero { padding: 120px 0 60px; }
+            .hero-content h1 { font-size: 2.25rem; }
+            .hero-content p { font-size: 1rem; }
+            .hero-buttons { flex-direction: column; }
+            .hero-stats { gap: 24px; }
+            .stat-number { font-size: 1.5rem; }
+            .features-grid { grid-template-columns: 1fr; }
+            .steps { grid-template-columns: 1fr; }
+            .guarantee-content { flex-direction: column; text-align: center; }
+            .pricing h2, .features h2, .faq-header h2 { font-size: 2rem; }
+            .cta-content h2 { font-size: 2rem; }
+            .cta-buttons { flex-direction: column; align-items: center; }
+            .footer-grid { grid-template-columns: 1fr; text-align: center; }
+        }
+
+        /* Mobile Menu */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--dark);
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu-btn { display: block; }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate {
+            animation: fadeInUp 0.6s ease forwards;
+        }
+    </style>
+
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="#hero" class="logo">
+                <div class="logo-icon">📦</div>
+                Bulk Product Importer
+            </a>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#how-it-works">How It Works</a>
+                <a href="#pricing">Pricing</a>
+                <a href="#faq">FAQ</a>
+                <a target="_blank" href="https://pluxify.co/docs-bulk-product-importer/">Docs</a>
+                <a href="#pricing" class="nav-cta">Get Started</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <div class="hero-bg-shapes">
+            <div class="hero-shape hero-shape-1"></div>
+            <div class="hero-shape hero-shape-2"></div>
+        </div>
+        <div class="container hero-container">
+            <div class="hero-content">
+                <h1>Import <span>1000+ Products</span> to WooCommerce in Minutes</h1>
+                <p>Stop wasting days on manual product entry. Upload a simple Excel file with your products and images, and watch your entire catalog go live automatically.</p>
+                <div class="hero-buttons">
+                    <a href="#pricing" class="btn btn-primary btn-large">Get Started Now →</a>
+                    <a href="#how-it-works" class="btn btn-secondary btn-large">See How It Works</a>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">50+</div>
+                        <div class="stat-label">Hours Saved</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">20,000+</div>
+                        <div class="stat-label">Products Imported</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">100%</div>
+                        <div class="stat-label">Success Rate</div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="hero-mockup">
+                    <div class="mockup-header">
+                        <div class="mockup-dots">
+                            <div class="mockup-dot"></div>
+                            <div class="mockup-dot"></div>
+                            <div class="mockup-dot"></div>
+                        </div>
+                        <div class="mockup-title">Bulk Product Importer</div>
+                    </div>
+                    <div class="mockup-body">
+                        <div class="upload-zone">
+                            <div class="upload-icon">📦</div>
+                            <div class="upload-text">Drop your <strong>ZIP file</strong> here<br>Excel + Images</div>
+                        </div>
+                        <div class="progress-demo">
+                            <div class="progress-header">
+                                <span>Importing products...</span>
+                                <span><strong>732</strong> / 1000</span>
+                            </div>
+                            <div class="progress-bar-bg">
+                                <div class="progress-bar"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="floating-badge badge-1">
+                    <div class="badge-icon green">✓</div>
+                    <div class="badge-text">
+                        <strong>Product Created</strong>
+                        <span>SKU: PROD-0731</span>
+                    </div>
+                </div>
+                <div class="floating-badge badge-2">
+                    <div class="badge-icon blue">🖼️</div>
+                    <div class="badge-text">
+                        <strong>Images Uploaded</strong>
+                        <span>3 images attached</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trust Bar -->
+    <section class="trust-bar">
+        <div class="container trust-content">
+            <div class="trust-label">Trusted by WooCommerce Store Owners Worldwide</div>
+            <div class="trust-logos">
+                <div class="trust-logo">🛒 WooCommerce</div>
+                <div class="trust-logo">📊 Excel Compatible</div>
+                <div class="trust-logo">⚡ Action Scheduler</div>
+                <div class="trust-logo">🔒 Secure Import</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section class="problem">
+        <div class="container">
+            <span class="section-label">The Problem</span>
+            <h2>Uploading Products Manually is a <br>Time-Consuming Nightmare</h2>
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="problem-icon">⏰</div>
+                    <h3>Endless Hours Wasted</h3>
+                    <p>Adding products one by one takes 5-10 minutes each. With 500 products, that's 40+ hours of repetitive work.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">🔄</div>
+                    <h3>CSV Import Failures</h3>
+                    <p>Default WooCommerce CSV importer times out with large files, loses images, and crashes on variable products.</p>
+                </div>
+                <div class="problem-card">
+                    <div class="problem-icon">😤</div>
+                    <h3>Frustrating Errors</h3>
+                    <p>Missing images, broken variations, duplicate SKUs – every import becomes a troubleshooting session.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section class="solution" id="features">
+        <div class="container">
+            <div class="solution-header">
+                <span class="section-label">The Solution</span>
+                <h2>Finally, a Product Importer That <span>Just Works</span></h2>
+                <p>Bulk Product Importer uses background processing and smart chunking to handle any import size without timeouts or failures.</p>
+            </div>
+            <div class="solution-grid">
+                <div class="solution-card">
+                    <div class="solution-icon">📊</div>
+                    <div class="solution-text">
+                        <h3>Simple Excel Format</h3>
+                        <p>Use familiar Excel spreadsheets – no complex CSV formatting or escaping required. Just fill in the columns.</p>
+                    </div>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">🖼️</div>
+                    <div class="solution-text">
+                        <h3>Images Included</h3>
+                        <p>Pack your images in the same ZIP file. We'll automatically match and upload them to each product.</p>
+                    </div>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">⚡</div>
+                    <div class="solution-text">
+                        <h3>Background Processing</h3>
+                        <p>No timeouts ever. Import runs in the background using WooCommerce's Action Scheduler. Close your browser and relax.</p>
+                    </div>
+                </div>
+                <div class="solution-card">
+                    <div class="solution-icon">🔄</div>
+                    <div class="solution-text">
+                        <h3>Variable Products</h3>
+                        <p>Full support for variable products with unlimited variations. Attributes, prices, stock – all handled automatically.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Grid -->
+    <section class="features">
+        <div class="container">
+            <div class="features-header">
+                <span class="section-label">Features</span>
+                <h2>Everything You Need for Bulk Imports</h2>
+                <p>Designed specifically for WooCommerce store owners who need to import products efficiently and reliably.</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📦</div>
+                    <h3>ZIP Upload</h3>
+                    <p>Single ZIP file contains everything – Excel files and all product images organized together.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🏷️</div>
+                    <h3>All Product Types</h3>
+                    <p>Simple, variable, variations – import any WooCommerce product type with full attribute support.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📁</div>
+                    <h3>Multi-File Support</h3>
+                    <p>Include multiple Excel files in one ZIP. Perfect for organizing products by category.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔄</div>
+                    <h3>Update Existing</h3>
+                    <p>SKU-based matching automatically updates existing products instead of creating duplicates.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Progress Tracking</h3>
+                    <p>Real-time progress updates show exactly how many products have been processed.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚙️</div>
+                    <h3>Configurable Batches</h3>
+                    <p>Adjust batch size based on your server capacity. Works on shared hosting to dedicated servers.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works" id="how-it-works">
+        <div class="container">
+            <div class="how-header">
+                <span class="section-label">How It Works</span>
+                <h2>From Excel to WooCommerce in 4 Simple Steps</h2>
+                <p>No technical expertise required. If you can use Excel, you can import thousands of products.</p>
+            </div>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number"><span class="step-icon">📊</span></div>
+                    <h3>Create Excel File</h3>
+                    <p>Fill in your product details using our simple template format.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number"><span class="step-icon">📁</span></div>
+                    <h3>Add Images</h3>
+                    <p>Put all product images in an "images" folder alongside your Excel.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number"><span class="step-icon">📤</span></div>
+                    <h3>Upload ZIP</h3>
+                    <p>Compress everything into a ZIP and upload through our interface.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number"><span class="step-icon">✅</span></div>
+                    <h3>Done!</h3>
+                    <p>Background processing handles everything. Your products appear in WooCommerce.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials">
+        <div class="container">
+            <div class="testimonials-header">
+                <span class="section-label">Testimonials</span>
+                <h2>Loved by Store Owners</h2>
+                <p style="color: var(--gray-300);">See what WooCommerce merchants are saying about Bulk Product Importer.</p>
+            </div>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <p class="testimonial-text">"I imported 3,500 products with images in just 2 hours. The default CSV importer kept timing out. This plugin saved my week!"</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">S</div>
+                        <div class="author-info">
+                            <strong>Sarah Chen</strong>
+                            <span>Fashion Store Owner</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <p class="testimonial-text">"Variable products were always a nightmare to import. With this plugin, I just set up the parent and variations in Excel – done in minutes."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">M</div>
+                        <div class="author-info">
+                            <strong>Michael Roberts</strong>
+                            <span>Electronics Retailer</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <p class="testimonial-text">"Background processing is genius. I upload the file, go to lunch, and come back to 15,000 products in my store. Absolutely magical."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">J</div>
+                        <div class="author-info">
+                            <strong>James Wilson</strong>
+                            <span>Wholesale Distributor</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section class="pricing" id="pricing">
+        <div class="container">
+            <div class="pricing-header">
+                <span class="section-label">Pricing</span>
+                <h2>Simple, One-Time Pricing</h2>
+                <p>No subscriptions. No hidden fees. Buy once, use forever.</p>
+            </div>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <div class="pricing-name">Personal</div>
+                    <div class="pricing-desc">For a single website</div>
+                    <div class="pricing-price">
+                        <span class="price-amount"><span class="price-currency">$</span>49</span>
+                        <span class="price-period">one-time</span>
+                    </div>
+                    <ul class="pricing-features">
+                        <li><span class="check-icon">✓</span> 1 Site License</li>
+                        <li><span class="check-icon">✓</span> Unlimited Products</li>
+                        <li><span class="check-icon">✓</span> All Product Types</li>
+                        <li><span class="check-icon">✓</span> Image Import</li>
+                        <li><span class="check-icon">✓</span> 1 Year Updates</li>
+                        <li><span class="check-icon">✓</span> Email Support</li>
+                    </ul>
+                    <a href="#" class="btn btn-secondary pricing-cta">Get Personal</a>
+                </div>
+                <div class="pricing-card featured">
+                    <div class="popular-badge">Most Popular</div>
+                    <div class="pricing-name">Business</div>
+                    <div class="pricing-desc">For growing businesses</div>
+                    <div class="pricing-price">
+                        <span class="price-amount"><span class="price-currency">$</span>99</span>
+                        <span class="price-period">one-time</span>
+                    </div>
+                    <ul class="pricing-features">
+                        <li><span class="check-icon">✓</span> 5 Site Licenses</li>
+                        <li><span class="check-icon">✓</span> Unlimited Products</li>
+                        <li><span class="check-icon">✓</span> All Product Types</li>
+                        <li><span class="check-icon">✓</span> Image Import</li>
+                        <li><span class="check-icon">✓</span> Lifetime Updates</li>
+                        <li><span class="check-icon">✓</span> Priority Support</li>
+                    </ul>
+                    <a href="#" class="btn btn-primary pricing-cta">Get Business</a>
+                </div>
+                <div class="pricing-card">
+                    <div class="pricing-name">Agency</div>
+                    <div class="pricing-desc">For developers & agencies</div>
+                    <div class="pricing-price">
+                        <span class="price-amount"><span class="price-currency">$</span>199</span>
+                        <span class="price-period">one-time</span>
+                    </div>
+                    <ul class="pricing-features">
+                        <li><span class="check-icon">✓</span> Unlimited Sites</li>
+                        <li><span class="check-icon">✓</span> Unlimited Products</li>
+                        <li><span class="check-icon">✓</span> All Product Types</li>
+                        <li><span class="check-icon">✓</span> White Label Ready</li>
+                        <li><span class="check-icon">✓</span> Lifetime Updates</li>
+                        <li><span class="check-icon">✓</span> Premium Support</li>
+                    </ul>
+                    <a href="#" class="btn btn-secondary pricing-cta">Get Agency</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Money Back Guarantee -->
+    <section class="guarantee">
+        <div class="container">
+            <div class="guarantee-content">
+                <div class="guarantee-badge">
+                    <span>🛡️</span>
+                    <strong>30-Day</strong>
+                </div>
+                <div class="guarantee-text">
+                    <h3>30-Day Money-Back Guarantee</h3>
+                    <p>Not satisfied? Get a full refund within 30 days. No questions asked. We're confident you'll love it.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq" id="faq">
+        <div class="container">
+            <div class="faq-header">
+                <span class="section-label">FAQ</span>
+                <h2>Frequently Asked Questions</h2>
+                <p>Got questions? We've got answers.</p>
+            </div>
+            <div class="faq-grid">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span class="faq-q">Q</span>
+                        <span>How many products can I import?</span>
+                    </div>
+                    <p class="faq-answer">There's no limit! We've tested imports of 50,000+ products. Background processing handles any size.</p>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span class="faq-q">Q</span>
+                        <span>Will my server crash during import?</span>
+                    </div>
+                    <p class="faq-answer">No. Products are imported in small batches using WooCommerce's Action Scheduler. Your site stays responsive throughout.</p>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span class="faq-q">Q</span>
+                        <span>Do you support variable products?</span>
+                    </div>
+                    <p class="faq-answer">Yes! Full support for variable products with unlimited variations, attributes, and variation-specific pricing.</p>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span class="faq-q">Q</span>
+                        <span>Can I update existing products?</span>
+                    </div>
+                    <p class="faq-answer">Absolutely. Products are matched by SKU. Existing products get updated instead of duplicated.</p>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span class="faq-q">Q</span>
+                        <span>What file formats are supported?</span>
+                    </div>
+                    <p class="faq-answer">Excel files (.xlsx, .xls) inside a ZIP archive with an optional "images" folder for product images.</p>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span class="faq-q">Q</span>
+                        <span>Do you offer support?</span>
+                    </div>
+                    <p class="faq-answer">Yes! All plans include email support. Business and Agency plans get priority response times.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="cta-section">
+        <div class="cta-bg">
+            <div class="cta-shape cta-shape-1"></div>
+            <div class="cta-shape cta-shape-2"></div>
+        </div>
+        <div class="container">
+            <div class="cta-content">
+                <h2>Ready to Save 50+ Hours?</h2>
+                <p>Stop wasting time on manual product entry. Import your entire catalog today and focus on what matters – growing your business.</p>
+                <div class="cta-buttons">
+                    <a href="#pricing" class="btn btn-primary btn-large">Get Bulk Product Importer →</a>
+                    <a href="#how-it-works" class="btn btn-secondary btn-large" style="border-color: #fff; color: #fff;">See Demo</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="#" class="logo">
+                        <div class="logo-icon">📦</div>
+                        Bulk Product Importer
+                    </a>
+                    <p>The fastest way to import products into WooCommerce. Built for store owners who value their time.</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Product</h4>
+                    <ul>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#pricing">Pricing</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                        <li><a href="#">Documentation</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Changelog</a></li>
+                        <li><a href="#">Tutorials</a></li>
+                    </ul>
+                </div>
+                <div class="footer-links">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Refund Policy</a></li>
+                        <li><a href="#">License</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 Bulk Product Importer by Al Imran Akash. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Analytics Ready Script Placeholder -->
+    <script>
+        // Google Analytics placeholder
+        // gtag('config', 'GA_MEASUREMENT_ID');
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Navbar background on scroll
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('.nav');
+            if (window.scrollY > 50) {
+                nav.style.boxShadow = '0 2px 20px rgba(0,0,0,0.1)';
+            } else {
+                nav.style.boxShadow = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
+
