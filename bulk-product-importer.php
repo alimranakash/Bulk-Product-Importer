@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Bulk Product Importer
  * Description: Import WooCommerce products in bulk from ZIP files containing Excel spreadsheets
- * Version: 1.0.0
+ * Version:     1.0.0
  * Author:      Al Imran Akash
  * Author URI:  https://profiles.wordpress.org/al-imran-akash/
  * Requires at least: 5.8
@@ -11,6 +11,53 @@
  */
 
 defined('ABSPATH') || exit;
+
+// Load Composer autoloader
+if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
+    require_once __DIR__ . '/vendor/autoload.php';
+}
+
+// Freemius SDK Integration
+if ( ! function_exists( 'bpi_fs' ) ) {
+    // Create a helper function for easy SDK access.
+    function bpi_fs() {
+        global $bpi_fs;
+
+        if ( ! isset( $bpi_fs ) ) {
+            // Include Freemius SDK.
+            // SDK is auto-loaded through Composer
+
+            $bpi_fs = fs_dynamic_init( array(
+                'id'                  => '22874',
+                'slug'                => 'bulk-product-importer',
+                'type'                => 'plugin',
+                'public_key'          => 'pk_a41ca9fd3d9fbb5ef876fd9daa190',
+                'is_premium'          => true,
+                'is_premium_only'     => true,
+                'has_addons'          => false,
+                'has_paid_plans'      => true,
+                // Automatically removed in the free version. If you're not using the
+                // auto-generated free version, delete this line before uploading to wp.org.
+                'wp_org_gatekeeper'   => 'OA7#BoRiBNqdf52FvzEf!!074aRLPs8fspif$7K1#4u4Csys1fQlCecVcUTOs2mcpeVHi#C2j9d09fOTvbC0HloPT7fFee5WdS3G',
+                'trial'               => array(
+                    'days'               => 7,
+                    'is_require_payment' => true,
+                ),
+                'menu'                => array(
+                    'slug'           => 'bulk-product-importer',
+                    'support'        => false,
+                ),
+            ) );
+        }
+
+        return $bpi_fs;
+    }
+
+    // Init Freemius.
+    bpi_fs();
+    // Signal that SDK was initiated.
+    do_action( 'bpi_fs_loaded' );
+}
 
 define('BPI_VERSION', '1.0.0');
 define('BPI_PLUGIN_DIR', plugin_dir_path(__FILE__));
