@@ -8,18 +8,19 @@ class BPI_Admin {
     }
 
     public function add_menu_page() {
-        add_submenu_page(
-            'woocommerce',
-            'Bulk Product Importer',
-            'Bulk Importer',
-            'manage_woocommerce',
-            'bulk-product-importer',
-            [$this, 'render_page']
+        add_menu_page(
+            'Bulk Product Importer',           // Page title
+            'Bulk Importer',                   // Menu title
+            'manage_woocommerce',              // Capability
+            'bulk-product-importer',           // Menu slug
+            [$this, 'render_page'],            // Callback function
+            'dashicons-database-import',       // Icon (database import dashicon)
+            56                                 // Position (after WooCommerce which is 55)
         );
     }
 
     public function enqueue_assets($hook) {
-        if ('woocommerce_page_bulk-product-importer' !== $hook) return;
+        if ('toplevel_page_bulk-product-importer' !== $hook) return;
         
         wp_enqueue_style('bpi-admin', BPI_PLUGIN_URL . 'assets/css/admin.css', [], BPI_VERSION);
         wp_enqueue_script('bpi-admin', BPI_PLUGIN_URL . 'assets/js/admin.js', ['jquery'], BPI_VERSION, true);
