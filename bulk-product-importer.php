@@ -123,10 +123,37 @@ final class Bulk_Product_Importer {
 
     public function init() {
         if (class_exists('WooCommerce')) {
-            new BPI_Admin();
-            new BPI_Scheduler();
-            new BPI_Ajax_Handler();
+            // This entire code block will be removed from the free version.
+            if ( bpi_fs()->can_use_premium_code__premium_only() ) {
+                new BPI_Admin();
+                new BPI_Scheduler();
+                new BPI_Ajax_Handler();
+            } else {
+                // Show license required notice
+                add_action('admin_notices', [$this, 'show_license_notice']);
+            }
         }
+    }
+
+    /**
+     * Show notice when license is not active
+     */
+    public function show_license_notice() {
+        $screen = get_current_screen();
+        if ($screen && $screen->id === 'toplevel_page_bulk-product-importer') {
+            return; // Freemius will handle the page
+        }
+        ?>
+        <div class="notice notice-warning">
+            <p>
+                <strong>Bulk Product Importer:</strong>
+                <?php esc_html_e('Please activate your license or start a free trial to use premium features.', 'bulk-product-importer'); ?>
+                <a href="<?php echo esc_url(admin_url('admin.php?page=bulk-product-importer-account')); ?>">
+                    <?php esc_html_e('Activate License', 'bulk-product-importer'); ?>
+                </a>
+            </p>
+        </div>
+        <?php
     }
 
     public function activate() {

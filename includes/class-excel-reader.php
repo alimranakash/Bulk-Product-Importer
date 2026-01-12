@@ -1,6 +1,11 @@
 <?php
 defined('ABSPATH') || exit;
 
+// This entire code block will be removed from the free version.
+if ( ! function_exists( 'bpi_fs' ) || ! bpi_fs()->can_use_premium_code__premium_only() ) {
+    return;
+}
+
 require_once BPI_PLUGIN_DIR . 'vendor/autoload.php';
 
 use PhpOffice\PhpSpreadsheet\IOFactory;

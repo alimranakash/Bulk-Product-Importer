@@ -1,6 +1,11 @@
 <?php
 defined('ABSPATH') || exit;
 
+// This entire code block will be removed from the free version.
+if ( ! function_exists( 'bpi_fs' ) || ! bpi_fs()->can_use_premium_code__premium_only() ) {
+    return;
+}
+
 class BPI_Ajax_Handler {
     private $importer;
     private $scheduler;

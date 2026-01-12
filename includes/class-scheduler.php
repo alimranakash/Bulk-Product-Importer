@@ -1,6 +1,11 @@
 <?php
 defined('ABSPATH') || exit;
 
+// This entire code block will be removed from the free version.
+if ( ! function_exists( 'bpi_fs' ) || ! bpi_fs()->can_use_premium_code__premium_only() ) {
+    return;
+}
+
 class BPI_Scheduler {
     const PROCESS_ACTION = 'bpi_process_single_product';
     const BATCH_ACTION = 'bpi_process_batch';
