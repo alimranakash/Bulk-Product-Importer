@@ -3,11 +3,14 @@
  * Plugin Name: Bulk Product Importer
  * Description: Import WooCommerce products in bulk from ZIP files containing Excel spreadsheets
  * Version:     1.0.0
+ * Plugin URI:  https://pluxify.co/bulk-product-importer/
  * Author:      Al Imran Akash
  * Author URI:  https://profiles.wordpress.org/al-imran-akash/
  * Requires at least: 5.8
  * Requires PHP: 7.4
  * WC requires at least: 5.0
+ * Text Domain: bulk-product-importer
+ * Domain Path: /languages
  */
 
 defined('ABSPATH') || exit;
